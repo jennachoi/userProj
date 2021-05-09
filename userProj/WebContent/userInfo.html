@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>userInfo.html</title>
+<script src='js/jquery-3.6.0.min.js'></script>
+<style>
+	table {
+		border-collapse: collapse;
+		width: 500px;
+	}
+	td {
+		padding: 10px;
+	}
+	#tb1 input[type="text"] {
+		width: 300px;
+	}
+	#tb1 td:not(:last-child) {
+		background-color: lightgrey;
+		font-weight: bold;
+	}
+	th {
+		background-color: lightblue;
+		height: 30px;
+	}
+</style>
+<script>
+
+//전체 리스트 출력
+$(document).ready(function () {
+	$.ajax({
+		url: 'userListServlet',
+		type: 'get',
+		dataType: 'json',
+		success: function(result) {
+			console.log(result);
+
+			let table = $('<table border="1" id="tb2"/>');
+			table.append(getTitle());
+			
+			//result 결과를 table에 append 
+			for (obj of result) {
+				let tr = $('<tr id="tr"/>');
+				let inputPhone = $('<input type="text" id="inputPhone" />').val(obj.phone);
+				let modifyBtn = $('<button />').html('수정');
+				modifyBtn.click(modify);
+				tr.append(
+						$('<td />').html(obj.id),
+						$('<td />').html(obj.name),
+						$('<td />').append(inputPhone),
+						$('<td />').html(obj.gender),
+						$('<td />').append(modifyBtn));
+				table.append(tr);
+				}
+			$('#show').append(table);
+		},
+		error: function(err){
+			console.log(err);
+		}
+	}); //end of list ajax
+	
+	// 테이블타이틀
+	function getTitle() {
+		let $title = $('<tr />');
+		$title.append(
+			$('<th />').html('회원번호'),		
+			$('<th />').html('이름'),		
+			$('<th />').html('연락처'),		
+			$('<th />').html('성별'),		
+			$('<th />').html('기능'),		
+			);
+		return $title;
+	};
+	
+	//등록버튼
+	$('#frm').on("submit", function(e){
+		e.preventDefault();
+        var id = $('#id').val();
+        var pass = $('#pass').val();
+        var name = $('#name').val();
+        var phone = $('#phone').val();
+        var gender = $("input[name='gender']:checked").val();   
+        
+		let inputPhone = $('<input type="text" id="inputPhone" />').val(obj.phone);
+		let modifyBtn = $('<button />').html('수정');
+		
+		//등록 서블릿 호출
+		$.ajax({
+			url: $('#frm').attr('action'),
+			type: 'post',
+			dataType: 'text',
+			data: 'id='+id+'&name='+name+'&pass='+pass+'&phone='+phone+'&gender='+gender,
+			success: function(result) {		
+				console.log('1건 등록됨.');
+
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		}); // end of submit ajax
+		
+		// 등록한 데이터 추가
+		$tr = $('<tr />').append (
+				$('<td />').append(id), 
+				$('<td />').append(name), 
+				$('<td />').append(inputPhone), 
+				$('<td />').append(gender), 
+				$('<td />').append(modifyBtn) 
+				)
+		$('#tb2').append(tr);
+	});	// end of submit 
+	
+	
+	//수정버튼 클릭 함수
+	function modify(e) {
+		e.preventDefault();
+		let modifyId = $(this).parent().parent().children(1).html();
+		let modifyPhone = $(this).parent().parent().find('#inputPhone').val();
+		
+		// 수정 서블릿 호출
+		$.ajax({
+			url: 'userModifyServlet',
+			type: 'post',
+			data: 'modifyId=' + modifyId + '&modifyPhone=' + modifyPhone,
+			success : function(result) {
+				console.log('업데이트 됨.')
+			},
+			error: function(err) {
+				console.log(err)
+			}
+		}); // end of modify ajax		
+	};	// end of modify function
+}); // end of ready
+
+</script>
+</head>
+<body>
+	<h3><등록화면></h3>
+	<form id='frm' action='userInsertServlet' method='post'>
+		<table border="1" id="tb1">
+			<tr>
+				<td><label for="id">사용ID</label></td>
+				<td><input type="text" name="id" id="id"></td>
+			</tr>
+			<tr>
+				<td><label for="name">이름</label></td>
+				<td><input type="text" name="name" id="name"></td>
+			</tr>
+			<tr>
+				<td><label for="pw">비밀번호</label></td>
+				<td><input type="text" name="pass" id="pass"></td>
+			</tr>
+			<tr>
+				<td><label for="phone">연락처</label></td>
+				<td><input type="text" name="phone" id="phone"></td>
+			</tr>
+			<tr>
+				<td><label for="gender">성별</label></td>
+				<td><label><input type="radio" name="gender" value="남자">남자&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				<label><input type="radio" name="gender" value="여자">여자</label>
+				</td>
+			<tr align="center">
+				<td colspan="2">
+					<input type="submit" value="등 록">
+					<input type="reset" value="취 소">
+				</td>
+			</tr>
+		</table>
+		<br>
+	</form>
+		<div id='show'></div>
+</body>
+</html>
