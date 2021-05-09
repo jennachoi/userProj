@@ -3,26 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <title>userInfo.html</title>
-<script src='js/jquery-3.6.0.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
-	table {
-		border-collapse: collapse;
-		width: 500px;
-	}
-	td {
-		padding: 10px;
-	}
-	#tb1 input[type="text"] {
-		width: 300px;
-	}
-	#tb1 td:not(:last-child) {
-		background-color: lightgrey;
-		font-weight: bold;
-	}
-	th {
-		background-color: lightblue;
-		height: 30px;
-	}
+table {
+	border-collapse: collapse;
+	width: 500px;
+}
+
+td {
+	padding: 10px;
+}
+
+#tb1 input[type="text"] {
+	width: 300px;
+}
+
+#tb1 td:not(:last-child) {
+	background-color: lightgrey;
+	font-weight: bold;
+}
+
+th {
+	background-color: lightblue;
+	height: 30px;
+}
 </style>
 <script>
 
@@ -135,7 +139,9 @@ $(document).ready(function () {
 </script>
 </head>
 <body>
-	<h3><등록화면></h3>
+	<h3>
+		<등록화면>
+	</h3>
 	<form id='frm' action='userInsertServlet' method='post'>
 		<table border="1" id="tb1">
 			<tr>
@@ -157,17 +163,15 @@ $(document).ready(function () {
 			<tr>
 				<td><label for="gender">성별</label></td>
 				<td><label><input type="radio" name="gender" value="남자">남자&nbsp;&nbsp;&nbsp;&nbsp;</label>
-				<label><input type="radio" name="gender" value="여자">여자</label>
+					<label><input type="radio" name="gender" value="여자">여자</label>
 				</td>
 			<tr align="center">
-				<td colspan="2">
-					<input type="submit" value="등 록">
-					<input type="reset" value="취 소">
-				</td>
+				<td colspan="2"><input type="submit" value="등 록"> <input
+					type="reset" value="취 소"></td>
 			</tr>
 		</table>
 		<br>
 	</form>
-		<div id='show'></div>
+	<div id='show'></div>
 </body>
 </html>
